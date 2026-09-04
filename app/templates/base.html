@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Backup File Exposure Checker — Real .git/.env/SQL Backup File Auditor{% endblock %}</title>
+
+<!-- SEO -->
+<meta name="description" content="{% block meta_description %}Backup File Exposure Checker is an open-source security tool that makes a bounded set of real, passive HTTP GET requests to a URL you authorize, checking well-known backup/version-control/metadata paths (.git/config, .env, .svn/entries, database.sql/backup.sql, backup.zip, .DS_Store) and confirming exposure only when the real response both succeeds AND contains a genuine content signature for that file type. Free CLI and web app by Karanam Shrivasta.{% endblock %}">
+<meta name="keywords" content="backup file exposure checker, exposed .git directory, exposed .env file, database backup exposure, svn entries exposure, ds_store exposure, source code disclosure scanner, Karanam Shrivasta security tools">
+<meta name="author" content="Karanam Shrivasta">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://github.com/mrshrivasta">
+
+<!-- Open Graph / social -->
+<meta property="og:title" content="Backup File Exposure Checker — by Karanam Shrivasta">
+<meta property="og:description" content="Real, no-mock-data check of whether a URL you authorize exposes well-known backup/version-control files (.git/config, .env, SQL dumps, backup archives, .DS_Store), confirmed only by real, matching response content signatures.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Backup File Exposure Checker">
+
+<!-- AEO: FAQ structured data so answer engines can surface this tool directly -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does the Backup File Exposure Checker check?",
+      "acceptedAnswer": {"@type": "Answer", "text": "It makes a bounded set of real, passive GET requests to well-known backup/version-control/metadata paths on a URL you authorize (.git/config, .env, .svn/entries, database.sql/backup.sql, backup.zip, .DS_Store), and only reports an exposure when the real response is both a success status AND its body/bytes contain a genuine content signature for that specific file type — never sample data, and no exploit payload is ever sent."}
+    },
+    {
+      "@type": "Question",
+      "name": "Who should use the Backup File Exposure Checker?",
+      "acceptedAnswer": {"@type": "Answer", "text": "Web developers and security engineers auditing whether backup, version-control, or database files are accidentally left publicly accessible in production, on sites and applications they own or are explicitly authorized to test."}
+    },
+    {
+      "@type": "Question",
+      "name": "Is the Backup File Exposure Checker a replacement for a professional security audit?",
+      "acceptedAnswer": {"@type": "Answer", "text": "No. It is an educational and productivity aid only. It does not replace a certified penetration test, compliance audit, or professional security assessment. See the disclaimer in the README."}
+    }
+  ]
+}
+</script>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="disclaimer-banner">
+  ⚠️ <strong>SECURITY &amp; LEGAL DISCLAIMER:</strong> This tool sends REAL HTTP requests to whatever URL you enter. Use it <strong>ONLY</strong>
+  against URLs/systems you own or are explicitly, contractually authorized to test — testing third-party sites without permission may violate
+  computer-crime laws and terms of service. Provided <strong>"AS IS", WITHOUT WARRANTY OF ANY KIND</strong>. Not a substitute for a professional
+  security audit. The author, <strong>Karanam Shrivasta</strong>, accepts <strong>NO LIABILITY</strong> for any damage, data loss, downtime, legal
+  consequences, or misuse arising from this software. By using this tool you accept full responsibility for your actions. See the README for the
+  complete disclaimer.
+</div>
+
+{% if current_user.is_authenticated %}
+<nav class="navbar">
+  <div class="nav-brand">🔐 Backup File Exposure Checker</div>
+  <div class="nav-links">
+    <a href="{{ url_for('dashboard.index') }}">Dashboard</a>
+    <a href="{{ url_for('logs.index') }}">Logs</a>
+    <a href="{{ url_for('alerts.index') }}">Alerts</a>
+    <a href="{{ url_for('incidents.index') }}">Incidents</a>
+    <a href="{{ url_for('analytics.index') }}">Analytics</a>
+    <a href="{{ url_for('reports.index') }}">Reports</a>
+    <a href="{{ url_for('settings.index') }}">Settings</a>
+    <a href="{{ url_for('auth.logout') }}">Logout ({{ current_user.username }})</a>
+  </div>
+</nav>
+{% endif %}
+
+<main class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="watermark-footer">
+  <p>
+    Backup File Exposure Checker &copy; {{ 2026 }} — Developed by <strong>Karanam Shrivasta</strong>
+    &middot; <a href="{{ github_url }}" target="_blank" rel="noopener">GitHub</a>
+    &middot; <a href="{{ linkedin_url }}" target="_blank" rel="noopener">LinkedIn</a>
+  </p>
+  <p class="footer-disclaimer">For authorized security auditing and educational use only. No warranty. Use at your own risk.</p>
+</footer>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>
